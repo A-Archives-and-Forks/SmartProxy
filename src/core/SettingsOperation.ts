@@ -455,9 +455,10 @@ export class SettingsOperation {
 		const fileName = backupFilename || "smartproxy_settings.json";
 
 		webDav.getFileContents(fileName, { format: "text" })
-			.then((data: string) => {
+			.then(data => {
 				try {
-					const restoredSettings = JSON.parse(data) as SettingsConfig;
+					const responseText = SettingsOperation.getWebDavTextResponse(data);
+					const restoredSettings = JSON.parse(responseText) as SettingsConfig;
 					if (!restoredSettings)
 						throw new Error("Invalid data received from WebDav server.");
 
@@ -477,6 +478,21 @@ export class SettingsOperation {
 					onError(error);
 				}
 			});
+	}
+
+	private static getWebDavTextResponse(data: any): string {
+		const rawData = data && typeof data === "object" && "data" in data ? data.data : data;
+
+		if (typeof rawData === "string")
+			return rawData;
+
+		if (rawData instanceof ArrayBuffer)
+			return new TextDecoder().decode(new Uint8Array(rawData));
+
+		if (ArrayBuffer.isView(rawData))
+			return new TextDecoder().decode(rawData);
+
+		return String(rawData);
 	}
 
 	public static saveAllLocal(forceSave: boolean = false) {

@@ -340,7 +340,7 @@ export class popup {
 			item.on("click", popup.onProxyableDomainClick);
 
 			// Setup arrow button click handler
-			item.find(".proxyable-arrow-btn").on("click", function (e) {
+			item.find(".proxyable-arrow-btn").on("click", function (this: HTMLElement, e) {
 				e.preventDefault();
 				e.stopPropagation();
 				popup.onProxyableArrowClick(this, proxyableDomain);
@@ -622,7 +622,7 @@ export class popup {
 			icon.removeClass("fa-chevron-up").addClass("fa-chevron-down");
 		} else {
 			// Close any other open panels first
-			jQuery(".proxyable-panel:visible").each(function () {
+			jQuery(".proxyable-panel:visible").each(function (this: Element) {
 				jQuery(this).slideUp(200);
 				jQuery(this).closest("li").find(".proxyable-arrow-btn i")
 					.removeClass("fa-chevron-up").addClass("fa-chevron-down");
@@ -665,7 +665,7 @@ export class popup {
 
 		popup.populateProxyServerOptions(cmbRuleProxy, popup.popupData.proxyServers, popup.popupData.proxyServersSubscribed, ruleProxyServerId);
 
-		cmbRuleProxy.on("change", function () {
+		cmbRuleProxy.on("change", function (this: HTMLElement) {
 			popup.onProxyableDomainProxyChange(this, proxyableDomain);
 		});
 
