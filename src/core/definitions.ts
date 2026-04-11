@@ -857,6 +857,7 @@ export class ProxyRule implements Cloneable {
 	public proxyServerId: string;
 	public enabled: boolean = true;
 	public whiteList: boolean = false;
+	public noProxyPerOrigin: boolean = false;
 
 	get ruleTypeName(): string {
 		return ProxyRuleType[this.ruleType];
@@ -941,6 +942,9 @@ export class ProxyRule implements Cloneable {
 		if (source['whiteList'] != null)
 			this.whiteList = source['whiteList'] == true ? true : false;
 
+		if (source['noProxyPerOrigin'] != null)
+			this.noProxyPerOrigin = source['noProxyPerOrigin'] == true ? true : false;
+
 		if (this.proxy) {
 			if (!Settings.validateProxyServer(this.proxy, false, true).success) {
 				this.proxy = null;
@@ -994,6 +998,7 @@ export class CompiledProxyRule {
 
 	public proxy: ProxyServer;
 	public whiteList: boolean = false;
+	public noProxyPerOrigin: boolean = false;
 
 	/**getting rule text */
 	get ruleText(): string {
